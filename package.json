@@ -1,0 +1,56 @@
+{
+  "name": "@natsuneko-laboratory/kiana",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "exports": {
+    "./global-setup": {
+      "import": "./dist/global-setup.mjs",
+      "require": "./dist/global-setup.cjs",
+      "types": "./dist/global-setup.d.ts"
+    },
+    "./vite": {
+      "import": "./dist/vite.mjs",
+      "require": "./dist/vite.cjs",
+      "types": "./dist/vite.d.ts"
+    },
+    "./vitest": {
+      "import": "./dist/vitest.mjs",
+      "require": "./dist/vitest.cjs",
+      "types": "./dist/vitest.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest",
+    "build": "tsc && vite build && tsc --project ./tsconfig.dts.json && npx tsx bin/esm-exports.ts --pattern **/*.mjs",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "Natsune Mochizuki",
+  "license": "MIT",
+  "dependencies": {
+    "fast-glob": "^3.3.2",
+    "normalize-path": "^3.0.0",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "@types/normalize-path": "^3.0.2",
+    "@types/yargs": "^17.0.32",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2"
+  },
+  "peerDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
