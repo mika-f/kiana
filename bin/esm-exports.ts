@@ -64,7 +64,7 @@ const main = async () => {
       };
     }
 
-    json["exports"] = exports;
+    json.exports = exports;
     await writeFile(pkg, JSON.stringify(json, null, 2));
   }
 };

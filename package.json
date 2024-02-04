@@ -1,8 +1,9 @@
 {
   "name": "@natsuneko-laboratory/kiana",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "type": "module",
+  "bin": {},
   "exports": {
     "./global-setup": {
       "import": "./dist/global-setup.mjs",
@@ -30,12 +31,18 @@
   "keywords": [],
   "author": "Natsune Mochizuki",
   "license": "MIT",
+  "files": [
+    "./bin",
+    "./dist",
+    "./lib"
+  ],
   "dependencies": {
     "fast-glob": "^3.3.2",
     "normalize-path": "^3.0.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.3",
     "@types/node": "^20.11.16",
     "@types/normalize-path": "^3.0.2",
     "@types/yargs": "^17.0.32",
