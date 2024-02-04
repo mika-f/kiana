@@ -16,7 +16,9 @@ const getEntries = ({
   baseDir: string;
   patterns: string[];
 }): Record<string, string> => {
-  const entries = glob.sync(patterns.map((w) => normalize(join(baseDir, w))));
+  const entries = glob
+    .sync(patterns, { cwd: baseDir })
+    .map((w) => normalize(join(baseDir, w)));
 
   return entries.reduce((w, cur) => {
     const dir = dirname(cur).substring(baseDir.length);
@@ -29,7 +31,7 @@ const getEntries = ({
 
 const defineConfig = ({
   baseDir = "./src/",
-  patterns = ["**/*.ts", "**/*.tsx"],
+  patterns = ["**/*.ts", "**/*.tsx", "!**/*.spec.ts", "!**/*.spec.tsx"],
   externals = [],
   plugins = [],
 }: {
