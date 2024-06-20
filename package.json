@@ -24,7 +24,10 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest",
-    "build": "tsc && vite build && tsc --project ./tsconfig.dts.json && npx tsx bin/esm-exports.ts --pattern **/*.mjs",
+    "build": "tsc && npm run build:vite && npm run build:tsc",
+    "build:vite": "vite build",
+    "build:tsc": "rm -f tsconfig.dts.tsbuildinfo && tsc --project ./tsconfig.dts.json",
+    "build:esm": "npx tsx bin/esm-exports.ts --pattern **/*.mjs --entrypoint dist/index.mjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

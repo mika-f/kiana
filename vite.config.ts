@@ -1,7 +1,8 @@
+import { basename } from "node:path";
 import { defineConfig } from "./lib/vite";
 
 export default defineConfig({
-  baseDir: "./lib/",
+  baseDir: "./lib",
   externals: [
     "node:path",
     "node:process",
@@ -11,4 +12,8 @@ export default defineConfig({
     "vitest",
     "vitest/config",
   ],
+  fileName: (format, name) => {
+    const base = basename(name);
+    return `${base}.${format === "cjs" ? "cjs" : "mjs"}`;
+  },
 });

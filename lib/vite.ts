@@ -1,15 +1,13 @@
-import { dirname, join, parse, resolve } from "node:path";
+import { basename, dirname, extname, join, resolve } from "node:path";
 import { cwd } from "node:process";
 
 import glob from "fast-glob";
 import normalize from "normalize-path";
-import { defineConfig as d, type PluginOption } from "vite";
-
-const basename = (path: string) => parse(path).name;
+import { type PluginOption, UserConfig, defineConfig as d } from "vite";
 
 const relative = (...paths: string[]) => resolve(cwd(), ...paths);
 
-const getEntries = ({
+const getImports = ({
   baseDir,
   patterns,
 }: {
@@ -21,36 +19,46 @@ const getEntries = ({
     .map((w) => normalize(join(baseDir, w)));
 
   return entries.reduce((w, cur) => {
-    const dir = dirname(cur).substring(baseDir.length);
-    const entry = basename(cur);
+    const dir = dirname(cur).substring(baseDir.length - 1);
+    const ext = extname(cur);
+    const entry = basename(cur, ext);
     w[normalize(join(dir, entry))] = relative(cur);
 
     return w;
   }, {} as Record<string, string>);
 };
 
+// https://vitejs.dev/config/
 const defineConfig = ({
-  baseDir = "./src/",
-  patterns = ["**/*.ts", "**/*.tsx", "!**/*.spec.ts", "!**/*.spec.tsx"],
+  baseDir = "./src",
+  patterns = [
+    "**/*.ts",
+    "**/*.tsx",
+    "!**/*.spec.ts",
+    "!**/*.spec.tsx",
+    "!**/*.stories.tsx",
+  ],
   externals = [],
   plugins = [],
+  fileName = "[name].[format]",
 }: {
   baseDir?: string;
   patterns?: string[];
   externals?: string[];
   plugins?: PluginOption[];
-}) =>
+  fileName?:
+    | string
+    | ((format: string, entryName: string) => string)
+    | undefined;
+}): UserConfig =>
   d({
-    plugins: [...plugins],
+    plugins: [plugins],
     build: {
       // do not copy public directory
       copyPublicDir: false,
       lib: {
-        entry: getEntries({ baseDir, patterns }),
-        fileName: (format, name) => {
-          const base = basename(name);
-          return `${base}.${format === "cjs" ? "cjs" : "mjs"}`;
-        },
+        entry: getImports({ baseDir, patterns }),
+        fileName,
         formats: ["es", "cjs"],
       },
       rollupOptions: {
